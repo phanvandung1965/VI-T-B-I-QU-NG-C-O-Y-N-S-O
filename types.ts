@@ -3,6 +3,7 @@ export interface FormState {
   promotion: string;
   length: 'short' | 'medium' | 'long' | 'special';
   spinContent: boolean;
+  market: 'australia' | 'vietnam';
 }
 
 export interface AdCopy {

@@ -7,17 +7,28 @@ interface Props {
 }
 
 const AdGeneratorForm: React.FC<Props> = ({ onGenerate, isLoading }) => {
-  const [occasion, setOccasion] = useState<string>('Ngày của Mẹ');
-  const [promotion, setPromotion] = useState<string>('Mua 2 hộp yến AAAAA tặng 1 ấm chưng trị giá 150 AUD');
+  const [occasion, setOccasion] = useState<string>('Quảng cáo thường xuyên');
+  const [promotion, setPromotion] = useState<string>('');
   const [length, setLength] = useState<FormState['length']>('medium');
-  const [spinContent, setSpinContent] = useState<boolean>(false);
+  const [spinContent, setSpinContent] = useState<boolean>(true);
+  const [market, setMarket] = useState<FormState['market']>('australia');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onGenerate({ occasion, promotion, length, spinContent });
+    onGenerate({ occasion, promotion, length, spinContent, market });
   };
 
   const isSpecialOption = length === 'special';
+  
+  const occasionOptions = [
+    'Quảng cáo thường xuyên',
+    'Ngày của Mẹ',
+    'Ngày của Cha',
+    'Tết Âm Lịch',
+    'Tết Dương Lịch',
+    'Khai trương',
+    'Giảm giá đặc biệt'
+  ];
 
   return (
     <div className="bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-gray-200 mb-8">
@@ -26,24 +37,39 @@ const AdGeneratorForm: React.FC<Props> = ({ onGenerate, isLoading }) => {
       
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
-          <label htmlFor="occasion" className="block text-md font-semibold mb-2 text-slate-700">
-            <span className="text-amber-500 mr-2">1.</span>Chương trình quảng cáo nhân dịp nào?
+          <label className="block text-md font-semibold mb-2 text-slate-700">
+             <span className="text-amber-500 mr-2">1.</span>Chọn thị trường quảng cáo
           </label>
-          <input
-            type="text"
+          <div className="flex space-x-4">
+              <label className={`flex items-center p-3 w-full border rounded-lg cursor-pointer transition-all duration-200 ${market === 'australia' ? 'border-amber-500 bg-amber-50 ring-2 ring-amber-500' : 'border-slate-300 hover:border-amber-400'}`}>
+                  <input type="radio" name="market" value="australia" checked={market === 'australia'} onChange={() => setMarket('australia')} className="h-4 w-4 text-amber-600 border-gray-300 focus:ring-amber-500"/>
+                  <span className="ml-2 font-medium text-slate-800">🇦🇺 Australia</span>
+              </label>
+              <label className={`flex items-center p-3 w-full border rounded-lg cursor-pointer transition-all duration-200 ${market === 'vietnam' ? 'border-amber-500 bg-amber-50 ring-2 ring-amber-500' : 'border-slate-300 hover:border-amber-400'}`}>
+                  <input type="radio" name="market" value="vietnam" checked={market === 'vietnam'} onChange={() => setMarket('vietnam')} className="h-4 w-4 text-amber-600 border-gray-300 focus:ring-amber-500"/>
+                  <span className="ml-2 font-medium text-slate-800">🇻🇳 Việt Nam</span>
+              </label>
+          </div>
+        </div>
+        
+        <div>
+          <label htmlFor="occasion" className="block text-md font-semibold mb-2 text-slate-700">
+            <span className="text-amber-500 mr-2">2.</span>Chương trình quảng cáo nhân dịp nào?
+          </label>
+           <select
             id="occasion"
             value={occasion}
             onChange={(e) => setOccasion(e.target.value)}
             disabled={isSpecialOption}
-            placeholder="Ví dụ: Khai trương, Giảm giá tháng 4, Tết Âm Lịch..."
             className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-amber-400 focus:border-amber-400 transition duration-200 disabled:bg-slate-100 disabled:cursor-not-allowed"
-          />
-          <p className="text-sm text-slate-500 mt-1">Để trống nếu là bài viết quảng cáo thông thường.</p>
+          >
+            {occasionOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+          </select>
         </div>
 
         <div>
           <label htmlFor="promotion" className="block text-md font-semibold mb-2 text-slate-700">
-            <span className="text-amber-500 mr-2">2.</span>Nội dung khuyến mãi cụ thể là gì?
+            <span className="text-amber-500 mr-2">3.</span>Nội dung khuyến mãi cụ thể là gì?
           </label>
           <textarea
             id="promotion"
@@ -51,7 +77,7 @@ const AdGeneratorForm: React.FC<Props> = ({ onGenerate, isLoading }) => {
             onChange={(e) => setPromotion(e.target.value)}
             disabled={isSpecialOption}
             rows={4}
-            placeholder="Ví dụ: Mua 2 tặng 1, Freeship toàn Úc, hoặc dán chi tiết giảm giá sản phẩm..."
+            placeholder="Ví dụ: Mua 2 tặng 1, Freeship, hoặc dán chi tiết giảm giá sản phẩm..."
             className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-amber-400 focus:border-amber-400 transition duration-200 disabled:bg-slate-100 disabled:cursor-not-allowed"
           />
           <p className="text-sm text-slate-500 mt-1">Để trống nếu không có khuyến mãi. AI sẽ tự động hiển thị đầy đủ chi tiết này.</p>
@@ -59,7 +85,7 @@ const AdGeneratorForm: React.FC<Props> = ({ onGenerate, isLoading }) => {
 
         <div>
           <h3 className="block text-md font-semibold mb-3 text-slate-700">
-             <span className="text-amber-500 mr-2">3.</span>Anh/chị muốn bài viết dài bao nhiêu?
+             <span className="text-amber-500 mr-2">4.</span>Anh/chị muốn bài viết dài bao nhiêu?
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {(

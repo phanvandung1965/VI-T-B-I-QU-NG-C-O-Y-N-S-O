@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import AdGeneratorForm from './components/AdGeneratorForm';
 import AdResultsDisplay from './components/AdResultsDisplay';
@@ -30,10 +29,17 @@ const App: React.FC = () => {
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
       <Header />
-      <main className="flex-grow container mx-auto p-4 md:p-8">
-        <div className="max-w-4xl mx-auto">
-          <AdGeneratorForm onGenerate={handleGenerate} isLoading={isLoading} />
-          <AdResultsDisplay adCopies={adCopies} isLoading={isLoading} error={error} />
+      <main className="flex-grow w-full max-w-7xl mx-auto p-4 md:p-8">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-8 items-start">
+          {/* Left Column: Form Inputs */}
+          <div className="md:col-span-2 md:sticky md:top-8 self-start">
+            <AdGeneratorForm onGenerate={handleGenerate} isLoading={isLoading} />
+          </div>
+
+          {/* Right Column: Results */}
+          <div className="md:col-span-3">
+            <AdResultsDisplay adCopies={adCopies} isLoading={isLoading} error={error} />
+          </div>
         </div>
       </main>
       <Footer />

@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import type { AdCopy } from '../types';
 
@@ -10,7 +9,7 @@ const AdCard: React.FC<Props> = ({ adCopy }) => {
   const [isCopied, setIsCopied] = useState(false);
 
   const handleCopy = () => {
-    // Combine content and hashtags for copying
+    // Combine content and supplementary hashtags for a complete, ready-to-post text.
     const fullText = `${adCopy.content}\n\n${adCopy.hashtags}`;
     navigator.clipboard.writeText(fullText).then(() => {
       setIsCopied(true);
@@ -21,8 +20,8 @@ const AdCard: React.FC<Props> = ({ adCopy }) => {
   return (
     <div className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden transition-all duration-300 hover:shadow-xl hover:border-amber-300">
       <div className="p-5 md:p-6">
-        <div className="flex justify-between items-start">
-            <h3 className="text-xl font-bold text-slate-800 mb-4">{adCopy.title}</h3>
+        <div className="flex justify-between items-start mb-4">
+            <h3 className="text-xl font-bold text-slate-800">{adCopy.title}</h3>
             <button
                 onClick={handleCopy}
                 className={`flex items-center text-sm font-semibold px-3 py-1.5 rounded-full transition-all duration-200 ${isCopied ? 'bg-green-100 text-green-700' : 'bg-slate-100 text-slate-600 hover:bg-amber-100 hover:text-amber-700'}`}
@@ -44,13 +43,14 @@ const AdCard: React.FC<Props> = ({ adCopy }) => {
                 )}
             </button>
         </div>
-        <div className="text-slate-700 whitespace-pre-wrap leading-relaxed text-base">
+        
+        {/* Post-like presentation */}
+        <div className="text-slate-700 whitespace-pre-wrap leading-relaxed text-base selection:bg-amber-200">
             {adCopy.content}
+            {'\n\n'}
+            <span className="text-blue-600 font-medium">{adCopy.hashtags}</span>
         </div>
-        <div className="mt-4 pt-4 border-t border-dashed border-slate-200">
-            <p className="font-semibold text-slate-600 mb-2">Hashtags bổ sung:</p>
-            <p className="text-amber-700 bg-amber-50 rounded-lg p-3 text-sm">{adCopy.hashtags}</p>
-        </div>
+
       </div>
     </div>
   );
